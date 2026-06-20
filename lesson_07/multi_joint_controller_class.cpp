@@ -8,7 +8,7 @@ class MultiJointController
 public:
     MultiJointController(
         const std::string & robot_name,
-        const std::string & joint_names,
+        const std::vector<std::string> & joint_names,
         const std::vector<double>  min_limits,
         const std::vector<double> max_limits,
         double kp)
@@ -147,25 +147,58 @@ int main()
         8.0
     );
 
-    double target_position = -1.2;
-    double current_position = -0.9;
+    std::vector<double> target_positions = {
+        0.0,
+        -1.0,
+        0.7,
+        0.3
+    };
+
+    std::vector<double> current_positions = {
+        0.1,
+        -0.8,
+        0.5,
+        0.4
+    };
+
     double tolerance = 0.05;
 
-    joint2_controller.printInfo();
+    if(!controller.checkVectorSizes(target_positions, current_positions))
+    {
+        std::cout << "Error: vector sizes do not match." << std::endl;
+        return 1;
+    }
 
-    bool safe = joint2_controller.isInsideLimit(target_position);
-    double error = joint2_controller.computeError(target_position, current_position);
-    double command = joint2_controller.computeCommand(error);
-    bool reached = joint2_controller.isTargetReached(error, tolerance);
+    if (!controller.areTargetSafe(target_positions))
+    {
+        std::cout << "Motion rejected. At least one target is outsude joint limits." << std::endl;
+        return 1;
+    }
+
+    std::vector<double> errors = controller.computeErrors(target_positions, current_positions);
+
+    std::vector<double> commands = controller.computeCommands(errors);
+
+    bool all_reached = controller.areAllJointsReached(errors, tolerance);
+
+    controller.printStatus(
+            target_positions,
+            current_positions,
+            errors,
+            commands
+    );
 
     std::cout << std::boolalpha;
+    std::cout << "All joints reached: " << all_reached << std::endl;
 
-    std::cout << "Target position: " << target_position << std::endl;
-    std::cout << "Current position: " << current_position << std::endl;
-    std::cout << "Safe target: " << safe << std::endl;
-    std::cout << "Error: " << error << std::endl;
-    std::cout << "Command: " << command << std::endl;
-    std::cout << "Target reached: " << reached << std::endl;
-
+    if (all_reached)
+    {
+        std::cout << "Final decision: Target already reached." << std::endl;
+    }
+    else
+    {
+        std::cout << "Final decision: Controller active." << std::endl;
+    }
+    
     return 0;
 }
