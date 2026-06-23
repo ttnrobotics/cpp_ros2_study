@@ -11,6 +11,14 @@ int main()
         2.9
     );
 
+    std::cout << "Initial Kp: " << controller.getKp() << std::endl;
+
+    bool gain_updated = controller.setKp(12.0);
+
+    std::cout << std::boolalpha;
+    std::cout << "Gain updated: " << gain_updated << std::endl;
+    std::cout << "Updated Kp: " << controller.getKp() << std::endl;
+
     double target_position = 1.0;
     double current_position = 0.7;
 

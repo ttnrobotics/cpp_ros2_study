@@ -13,6 +13,10 @@ public:
 
     void printInfo();
 
+    bool setKp(double kp);
+
+    double getKp() const;
+
     bool isInsideLimit(double target_position);
 
     double computeError(
