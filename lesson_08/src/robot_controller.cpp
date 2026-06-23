@@ -1,16 +1,19 @@
 #include "robot_controller.hpp"
 
 #include <iostream>
+#include <cmath>
 
 RobotController::RobotController(
     const std::string & robot_name,
     double kp,
     double min_limit,
-    double max_limit)
+    double max_limit,
+    double tolerance)
 : robot_name_(robot_name),
   kp_(kp),
   min_limit_(min_limit),
-  max_limit_(max_limit)
+  max_limit_(max_limit),
+  tolerance_(tolerance)
 {
 }
 
@@ -58,7 +61,26 @@ double RobotController::computeError(
     return target_position - current_position;
 }
 
+double RobotController::computeVelocityError(
+    double target_velocity,
+    double current_velocity) const
+{
+    return target_velocity - current_velocity;
+}
+
 double RobotController::computeCommand(double error)
 {
     return kp_ * error;
+}
+
+double RobotController::computePDCommand(
+    double position_error,
+    double velocity_error) const
+{
+    return kp_ * position_error  + kd_ * velocity_error;
+}
+
+bool RobotController::isTargetReached(double error) const
+{
+    return std::abs(error) < tolerance_;
 }
