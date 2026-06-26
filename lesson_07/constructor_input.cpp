@@ -11,6 +11,11 @@ public:
         kp_ = kp;
     }
 
+    ~RobotController()
+    {
+        std::cout << "RobotController destroyed!" << std::endl;
+    }
+
     double computeError(double target, double current)
     {
         return target - current;
