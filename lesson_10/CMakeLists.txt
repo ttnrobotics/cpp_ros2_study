@@ -12,3 +12,13 @@ add_executable(robot_demo
 target_include_directories(robot_demo
                 PRIVATE
                 include)   
+
+add_executable(robot_test
+    src/test_robot_controller.cpp
+    src/robot_controller.cpp
+)
+
+target_include_directories(robot_test
+    PRIVATE
+    include
+)
