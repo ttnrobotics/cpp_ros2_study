@@ -42,3 +42,12 @@ add_executable(robot_demo2
 target_link_libraries(robot_demo2
     PRIVATE
     robot_controller_lib)
+
+# ---
+
+add_executable(multi_joint_robot_demo
+    src/multi_joint_controller.cpp)
+
+target_link_libraries(multi_joint_robot_demo
+    PRIVATE
+    robot_controller_lib)
