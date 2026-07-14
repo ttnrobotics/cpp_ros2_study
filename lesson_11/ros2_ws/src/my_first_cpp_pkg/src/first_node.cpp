@@ -38,3 +38,15 @@ private:
     rclcpp::TimerBase::SharedPtr timer_;
 };
 
+int main(int argc, char * argv[])
+{
+    rclcpp::init(argc, argv);
+
+    auto node = std::make_shared<FirstRobotNode>();
+
+    rclcpp::spin(node);
+
+    rclcpp::shutdown();
+
+    return 0;
+}
