@@ -15,13 +15,14 @@ public:
         current_position_ = 0.0;
 
         timer_ = this->create_wall_timer(1000ms,
-                                        std::bind(&FirstRobotNode::controlLoop, this);
+                                        std::bind(&FirstRobotNode::controlLoop, this));
         RCLCPP_INFO(this->get_logger(), "First ROS2 C++ node started.");
     }
 private:
     void controlLoop()
     {
         double error = target_position_ - current_position_;
+        
         current_position_ += 0.1 * error;
 
         RCLCPP_INFO(

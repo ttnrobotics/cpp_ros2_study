@@ -9,6 +9,14 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 
+add_executable(first_node src/first_node.cpp)
+
+ament_target_dependencies(first_node rclcpp)
+
+install(TARGETS
+       first_node
+       DESTINATION lib/${PROJECT_NAME})
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
